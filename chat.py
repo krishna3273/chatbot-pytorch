@@ -22,14 +22,9 @@ model=NeuralNet(input_size,hidden_size,output_size).to(device)
 model.load_state_dict(model_state)
 model.eval()
 
-name="kmt_bot"
-print("Let's chat! ('quit' to exit)" )
-tag=""
-while True:
-    sentence=input('You: ')
-    if sentence=="quit":
-        break
-    sentence=tokenise(sentence)
+
+def get_response(message):
+    sentence=tokenise(message)
     vec=bag_of_words(sentence,all_words)
     vec=torch.from_numpy(vec.reshape(1,vec.shape[0]))
 
@@ -42,9 +37,6 @@ while True:
         for intent in intents['intents']:                
             if tag==intent["tag"]:
                 random_res=random.choice(intent["responses"])
-                print(f"{name}: {random_res}")
-    else:
-        print(f"{name}: Sorry,I cannot understand your question")
+                return random_res
+    return "Sorry,I cannot understand your question"
 
-    if tag=="goodbye":
-        break
